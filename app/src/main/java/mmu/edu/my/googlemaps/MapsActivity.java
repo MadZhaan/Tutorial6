@@ -1,5 +1,6 @@
 package mmu.edu.my.googlemaps;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -51,6 +52,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    String[] permissions2 = {Manifest.permission.ACCESS_FINE_LOCATION};
+                    ActivityCompat.requestPermissions(this, permissions2, 0);
+                    return;
+                }
+                mMap.setMyLocationEnabled(true);
+            } else {
+                String[] permissions2 = {Manifest.permission.ACCESS_FINE_LOCATION};
+                ActivityCompat.requestPermissions(this, permissions2, 0);
+            }
+        }
     }
 
 
